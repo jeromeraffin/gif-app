@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router';
 import styled from 'styled-components';
 
 const StyledHeader = styled.header`
@@ -25,6 +26,8 @@ const Header = () => (
   <StyledHeader>
     <Title>Gif Power</Title>
     <Subtitle>Powerful GIFs search application</Subtitle>
+    <Link to="/search">Search</Link>
+    <Link to="/favorites">Favorites</Link>
   </StyledHeader>
 )
 
