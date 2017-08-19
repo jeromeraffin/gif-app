@@ -1,7 +1,8 @@
 import React from 'react';
 
-const NoResults = () => (
-  <div>Aucun résultat</div>
-)
+const NoResultsHOC = (WrappedComponent) =>
+({...props}) => (props.gifs.length === 0 && props.loaded)
+  ? <div>Aucun résultat</div>
+  : <WrappedComponent {...props}/>
 
-export default NoResults;
+export default NoResultsHOC;

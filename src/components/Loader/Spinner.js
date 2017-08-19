@@ -36,11 +36,11 @@ const Bounce2 = styled(Bounce)`
     background-color: #ffd800;
 `;
 
-const Loading = () => (
+const Spinner = () => (
     <StyledSpinnner>
         <Bounce />
         <Bounce2 />
     </StyledSpinnner>
 );
 
-export default Loading;
+export default Spinner;

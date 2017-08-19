@@ -1,22 +1,35 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { browserHistory, IndexRedirect, Router, Route } from 'react-router'
+import thunk from 'redux-thunk';
+import { createStore, applyMiddleware, compose } from 'redux';
 
 import 'normalize.css/normalize.css';
 import './global-styles';
 
-import App from './components/App';
-import SearchPage from './components/SearchPage';
-import Favs from './components/Favs';
+import reducers from './reducers';
+import { loadState, saveState } from './localStorage';
+import Root from './components/Root';
 import registerServiceWorker from './registerServiceWorker';
 
+const persistedState = loadState();
+
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+
+const store = createStore(
+  reducers,
+  persistedState,
+  composeEnhancers(
+    applyMiddleware(thunk),
+  )
+);
+
+store.subscribe(() => {
+  saveState({
+    favoritedGifs: store.getState().favoritedGifs
+  })
+})
+
 ReactDOM.render((
-  <Router history={browserHistory}>
-    <Route path="/" component={App}>
-      <IndexRedirect to="/search" />
-      <Route path="search(/:query)" component={SearchPage} />
-      <Route path="favorites" component={Favs} />
-    </Route>
-  </Router>
+  <Root store={store} />
 ), document.getElementById('root'));
 registerServiceWorker();

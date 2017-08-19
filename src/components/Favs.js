@@ -1,47 +1,27 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 
-import { fetchFavsGifs } from '../utils/api';
+import { addGifToFavorites, removeGifFromFavorites } from '../actions'
 import GifsList from './GifsList';
 
 class Favs extends Component {
-  constructor(props) {
-    super(props);
 
-    this.state = {
-      gifs: [],
-      favoritedGifsIds: JSON.parse(localStorage.getItem('favoritedGifsIds')) || []
+  onFavoriteClicked = (gifClicked) => {
+    if(this.props.favoritedGifs.find(gif => gif.id === gifClicked.id) !== undefined) {
+      this.props.removeGifFromFavorites(gifClicked);
     }
-  }
-
-  componentDidMount() {
-    if(this.state.favoritedGifsIds.length > 0) {
-      fetchFavsGifs(this.state.favoritedGifsIds).then(gifs => this.setState({
-        gifs: gifs
-      }))
-    }
-  }
-
-  onFavoriteClicked = (favId) => {
-    if(this.state.favoritedGifsIds.includes(favId)) {
-      const newFavoritesState = this.state.favoritedGifsIds.filter(gif => gif !== favId)
-      const newGifsState = this.state.gifs.filter(gif => gif.id !== favId)
-
-      this.setState({
-        gifs: newGifsState,
-        favoritedGifsIds: newFavoritesState
-      })
-
-      localStorage.setItem('favoritedGifsIds', JSON.stringify(newFavoritesState));
+    else {
+      this.props.addGifToFavorites(gifClicked);
     }
   }
 
   render() {
-    const { gifs, favoritedGifsIds } = this.state
+    const { favoritedGifs } = this.props;
     return (
       <div>
         <GifsList
-          gifs={gifs}
-          favoritedGifsIds={favoritedGifsIds}
+          gifs={favoritedGifs}
+          favoritedGifs={favoritedGifs}
           onFavoriteClicked={this.onFavoriteClicked}
         />
       </div>
@@ -49,4 +29,26 @@ class Favs extends Component {
   }
 }
 
-export default Favs;
+const mapStateToProps = state => {
+  return {
+    favoritedGifs: state.favoritedGifs.items
+  }
+}
+
+const mapDispatchToProps = dispatch => {
+  return {
+    addGifToFavorites: gif => {
+      dispatch(addGifToFavorites(gif))
+    },
+    removeGifFromFavorites: gif => {
+      dispatch(removeGifFromFavorites(gif))
+    }
+  }
+}
+
+const ConnectedFavs = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Favs);
+
+export default ConnectedFavs;
