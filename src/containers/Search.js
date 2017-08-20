@@ -17,7 +17,8 @@ const mapStateToProps = state => {
 const ConnectedSearch = compose(
   connect(mapStateToProps),
   reduxForm({
-    form: 'search'
+    form: 'search',
+    enableReinitialize: true
   })
 )(Search);
 

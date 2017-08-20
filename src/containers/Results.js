@@ -1,10 +1,15 @@
 import { connect } from 'react-redux';
-import { sendSearch, addGifToFavorites, removeGifFromFavorites } from '../actions';
 import Results from '../components/Results';
 import LoaderHOC from '../components/Loader';
-import NoResultsHOC from '../components/NoResults.js'
-import ErrorHOC from '../components/Error.js'
+import NoResultsHOC from '../components/NoResults.js';
+import ErrorHOC from '../components/Error.js';
 
+import {
+  sendSearch,
+  addGifToFavorites,
+  removeGifFromFavorites,
+  copyGifUrl
+} from '../actions';
 
 const mapStateToProps = ({ gifs, favoritedGifs }) => {
   return {
@@ -48,6 +53,9 @@ const mergedProps = (stateProps, dispatchProps) => {
       else {
         dispatch(addGifToFavorites(gifClicked))
       }
+    },
+    onCopyClicked: () => {
+      dispatch(copyGifUrl());
     },
     loadMoreGifs: (searchParameter, page) => {
       dispatch(sendSearch(searchParameter, page));

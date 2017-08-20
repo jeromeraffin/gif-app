@@ -1,4 +1,5 @@
-import React, { Component } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
 import GifsList from './GifsList';
@@ -22,12 +23,13 @@ const Button = LoaderHOC(styled.button`
   font-family: 'Montserrat', Helvetica, sans-serif;
 `)
 
-const Results = ({ gifs, favoritedGifs, onFavoriteClicked, page, loadingPage, loaded, loadMoreGifs, searchParameter }) => (
+const Results = ({ gifs, favoritedGifs, onFavoriteClicked, page, loadingPage, loaded, loadMoreGifs, searchParameter, onCopyClicked }) => (
   <StyledSearch>
     <GifsList
       gifs={gifs}
       favoritedGifs={favoritedGifs}
       onFavoriteClicked={onFavoriteClicked}
+      onCopyClicked={onCopyClicked}
     />
   {loaded &&
     <Button
@@ -38,5 +40,16 @@ const Results = ({ gifs, favoritedGifs, onFavoriteClicked, page, loadingPage, lo
   }
   </StyledSearch>
 )
+
+Results.propTypes = {
+  gifs: PropTypes.array.isRequired,
+  favoritedGifs: PropTypes.array.isRequired,
+  onFavoriteClicked: PropTypes.func.isRequired,
+  page: PropTypes.number.isRequired,
+  loadingPage: PropTypes.bool,
+  loaded: PropTypes.bool,
+  loadMoreGifs: PropTypes.func.isRequired,
+  searchParameter: PropTypes.string.isRequired
+};
 
 export default Results;

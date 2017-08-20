@@ -1,7 +1,8 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import styled from 'styled-components';
 
 import Header from './Header';
+import Popup from './Popup';
 import ConnectedSearch from '../containers/Search';
 
 const StyledApp = styled.div`
@@ -11,15 +12,13 @@ const StyledApp = styled.div`
   text-align:center;
 `;
 
-class App extends Component {
+class App extends PureComponent {
 
   handleSubmit = values => {
-    this.props.clearSearch();
     this.props.router.push(`/search/${values.searchParameter}`);
   }
 
   handleReset = event => {
-    this.props.initializeForm();
     this.props.clearSearch();
     this.props.router.push(`/search/`);
   }
@@ -37,9 +36,10 @@ class App extends Component {
   }
 
   render() {
-    const { children } = this.props;
+    const { children, copied } = this.props;
     return (
       <StyledApp>
+        <Popup copied={copied} />
         <Header />
         <ConnectedSearch onSubmit={this.handleSubmit} handleReset={this.handleReset} />
         {children}

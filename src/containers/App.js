@@ -1,5 +1,4 @@
 import { connect } from 'react-redux';
-import { initialize } from 'redux-form';
 
 import App from '../components/App';
 
@@ -8,31 +7,28 @@ import {
   sendSearch
 } from '../actions';
 
-const mapStateToProps = ({ gifs, favoritedGifs, error, page }) => {
+const mapStateToProps = ({ gifs, favoritedGifs }) => {
   return {
     gifs: gifs.items,
     loading: gifs.loading,
     favoritedGifs: favoritedGifs.items,
     error: gifs.error,
-    page: gifs.page
+    page: gifs.page,
+    copied: gifs.copied
   }
 }
 
 const mapDispatchToProps = dispatch => {
   return {
     handleSearch: searchParameter => {
-      if(searchParameter) {
+      if (searchParameter) {
         dispatch(sendSearch(searchParameter));
       } else {
         dispatch(clearSearch());
-        dispatch(initialize('search', {}));
       }
     },
     clearSearch: () => {
       dispatch(clearSearch())
-    },
-    initializeForm: () => {
-      dispatch(initialize('search', {}))
     }
   }
 }

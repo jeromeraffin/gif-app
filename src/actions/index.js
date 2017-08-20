@@ -1,44 +1,61 @@
 import { fetchGifs } from '../utils/api';
 
+import {
+  CLEAR_SEARCH,
+  COPY_GIF_URL_REQUEST,
+  COPY_GIF_URL_SUCCESS,
+  FETCH_GIFS_REQUEST,
+  FETCH_GIFS_SUCCESS,
+  FETCH_GIFS_FAILURE,
+  ADD_GIF_TO_FAVORITES,
+  REMOVE_GIF_FROM_FAVORITES,
+  FETCH_NEW_GIFS_PAGE_REQUEST,
+  FETCH_NEW_GIFS_PAGE_SUCCESS
+} from '../utils/constants'
+
 export const clearSearch = () => {
   return {
-    type: 'CLEAR_SEARCH'
+    type: CLEAR_SEARCH
   }
+}
+
+export const copyGifUrlRequest = () => {
+  return {
+    type: COPY_GIF_URL_REQUEST
+  }
+}
+
+export const copyGifUrlSuccess = () => {
+  return {
+    type: COPY_GIF_URL_SUCCESS
+  }
+}
+
+export const copyGifUrl = () => dispatch => {
+  dispatch(copyGifUrlRequest());
+
+  setTimeout(() => {
+    dispatch(copyGifUrlSuccess());
+  }, 500);
 }
 
 export const sendSearch = (searchParameter, page) => dispatch => {
-  if(page > 1) {
-    console.log(page)
-    dispatch(fetchMoreGifsRequest(searchParameter, page));
+  if (page > 1) {
+    dispatch(fetchNewGifsPageRequest(searchParameter, page));
     return fetchGifs(searchParameter, page)
-      .then(({data}) => dispatch(fetchMoreGifsSuccess(data.data)))
-      .catch(error => dispatch(fetchGifsFailure(error)));
-  } else {
-    dispatch(fetchGifsRequest(searchParameter, page));
-    return fetchGifs(searchParameter, page)
-      .then(({data}) => dispatch(fetchGifsSuccess(data.data)))
+      .then(({data}) => dispatch(fetchNewGifsPageSuccess(data.data)))
       .catch(error => dispatch(fetchGifsFailure(error)));
   }
-}
 
-export const fetchMoreGifsRequest = () => {
-  return {
-    type: 'FETCH_MORE_GIFS_REQUEST'
-  }
-}
-
-export const fetchMoreGifsSuccess = items => {
-  return {
-    type: 'FETCH_MORE_GIFS_SUCCESS',
-    payload: {
-      items
-    }
-  }
+  dispatch(fetchGifsRequest(searchParameter, page));
+  return fetchGifs(searchParameter, page)
+    .then(({data}) => dispatch(fetchGifsSuccess(data.data)))
+    .catch(error => dispatch(fetchGifsFailure(error)));
 }
 
 export const fetchGifsRequest = searchParameter => {
   return {
-    type: 'FETCH_GIFS_REQUEST',
+    type: FETCH_GIFS_REQUEST,
     payload: {
       searchParameter
     }
@@ -47,7 +64,22 @@ export const fetchGifsRequest = searchParameter => {
 
 export const fetchGifsSuccess = items => {
   return {
-    type: 'FETCH_GIFS_SUCCESS',
+    type: FETCH_GIFS_SUCCESS,
+    payload: {
+      items
+    }
+  }
+}
+
+export const fetchNewGifsPageRequest = () => {
+  return {
+    type: FETCH_NEW_GIFS_PAGE_REQUEST
+  }
+}
+
+export const fetchNewGifsPageSuccess = items => {
+  return {
+    type: FETCH_NEW_GIFS_PAGE_SUCCESS,
     payload: {
       items
     }
@@ -56,7 +88,7 @@ export const fetchGifsSuccess = items => {
 
 export const fetchGifsFailure = error => {
   return {
-    type: 'FETCH_GIFS_FAILURE',
+    type: FETCH_GIFS_FAILURE,
     payload: {
       error
     }
@@ -65,7 +97,7 @@ export const fetchGifsFailure = error => {
 
 export const addGifToFavorites = item => {
   return {
-    type: 'ADD_GIF',
+    type: ADD_GIF_TO_FAVORITES,
     payload: {
       item
     }
@@ -74,7 +106,7 @@ export const addGifToFavorites = item => {
 
 export const removeGifFromFavorites = item => {
   return {
-    type: 'REMOVE_GIF',
+    type: REMOVE_GIF_FROM_FAVORITES,
     payload: {
       item
     }

@@ -1,9 +1,9 @@
-import React, {Component} from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
+import CopyToClipboard from 'react-copy-to-clipboard';
 import styled, { keyframes } from 'styled-components';
 
 import Icon from './Icon';
-
-// import Button from './Button';
 
 const Item = styled.li`
   display: inline-flex;
@@ -31,7 +31,7 @@ const Img = styled.img`
 
 const Actions = styled.div`
   display: flex;
-  justify-content: center;
+  justify-content: space-around;
   width: 100%;
   padding: .8rem;
 `
@@ -41,10 +41,15 @@ const FavIcon = styled(Icon) `
   fill: #ff0066;
 `
 
+const CopyIcon = styled(Icon)`
+  cursor: pointer;
+  fill: #ffd800;
+`
+
 const Button = styled.span`
   display: flex;
 `
-const Gif = ({ id, url, width, height, favGif, onFavoriteClicked }) => {
+const Gif = ({ id, url, originalUrl, width, height, favGif, onFavoriteClicked, onCopyClicked }) => {
   const gifClicked = {
     id: id,
     images : {
@@ -52,6 +57,9 @@ const Gif = ({ id, url, width, height, favGif, onFavoriteClicked }) => {
           url: url,
           width: width,
           height: height
+        },
+        original: {
+          url: originalUrl
         }
     }
   }
@@ -68,9 +76,22 @@ const Gif = ({ id, url, width, height, favGif, onFavoriteClicked }) => {
             <FavIcon width="25" height="25" glyph="favorite_empty" />
           </Button>
         }
+        <CopyToClipboard text={originalUrl}>
+          <Button onClick={() => {onCopyClicked()}}>
+            <CopyIcon width="25" height="25" glyph="copy"/>
+          </Button>
+        </CopyToClipboard>
       </Actions>
     </Item>
   )
 }
+
+Gif.propTypes = {
+  id: PropTypes.string.isRequired,
+  url: PropTypes.string.isRequired,
+  width: PropTypes.string.isRequired,
+  height: PropTypes.string.isRequired,
+  favGif: PropTypes.bool.isRequired
+};
 
 export default Gif;

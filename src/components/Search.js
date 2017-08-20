@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Field } from 'redux-form'
 import styled from 'styled-components';
 
@@ -8,7 +9,7 @@ const StyledSearch = styled.div`
   display: flex;
   justify-content: center;
   margin-bottom: 1rem;
-  padding: 2rem 0;
+  padding: 2rem 0 2.6rem;
   background-color: #ff0066;
 `
 
@@ -64,10 +65,25 @@ const Search = ({ handleSubmit, handleReset, searchParameter }) => (
   <StyledSearch>
     <Form onSubmit={handleSubmit}>
       <SearchIcon width="30" height="30" glyph="search"/>
-      <TextInput name="searchParameter" component="input" type="text" placeholder="Type something great"/>
-      {searchParameter ? <span onClick={handleReset}><ClearButton width="30" height="30" glyph="clear"/></span> : '' }
+      <TextInput
+        name="searchParameter"
+        component="input"
+        type="text"
+        placeholder="Unleash the keywords"
+      />
+      {searchParameter ?
+        <span onClick={handleReset}>
+          <ClearButton width="30" height="30" glyph="clear"/>
+        </span> : ''
+      }
     </Form>
   </StyledSearch>
 )
+
+Search.propTypes = {
+  handleSubmit: PropTypes.func.isRequired,
+  handleReset: PropTypes.func.isRequired,
+  searchParameter: PropTypes.string
+};
 
 export default Search;

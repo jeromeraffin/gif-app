@@ -2,10 +2,13 @@ import React from 'react';
 import { Link } from 'react-router';
 import styled from 'styled-components';
 
+import Giphy from '../assets/images/Giphy.png';
+
 const StyledHeader = styled.header`
   display: flex;
   flex-direction: column;
   justify-content: center;
+  align-items: center;
   padding: 2rem 2rem 0;
   background-color: #ff0066;
   color: #ffffff;
@@ -16,12 +19,6 @@ const Title = styled.h1`
   text-transform: uppercase;
   font-size: 3rem;
   font-weight: 400;
-  line-height: 1;
-`
-
-const Subtitle = styled.h2`
-  margin: 0;
-  font-weight: 200;
 `
 
 const Nav = styled.nav`
@@ -43,7 +40,7 @@ const NavLink = styled(Link)`
 const Header = () => (
   <StyledHeader>
     <Title>Gif Power</Title>
-    <Subtitle>Powerful GIFs search application</Subtitle>
+    <img alt="Powered by Giphy" src={Giphy} width="200" height="20"/>
     <Nav>
       <NavLink to="/favorites">Favorites</NavLink>
     </Nav>
