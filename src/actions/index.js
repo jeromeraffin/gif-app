@@ -1,4 +1,5 @@
 import { fetchGifs } from '../utils/api';
+import copy from 'copy-to-clipboard';
 
 import {
   CLEAR_SEARCH,
@@ -31,9 +32,9 @@ export const copyGifUrlSuccess = () => {
   }
 }
 
-export const copyGifUrl = () => dispatch => {
+export const copyGifUrl = url => dispatch => {
   dispatch(copyGifUrlRequest());
-
+  copy(url);
   setTimeout(() => {
     dispatch(copyGifUrlSuccess());
   }, 500);
@@ -43,13 +44,13 @@ export const sendSearch = (searchParameter, page) => dispatch => {
   if (page > 1) {
     dispatch(fetchNewGifsPageRequest(searchParameter, page));
     return fetchGifs(searchParameter, page)
-      .then(({data}) => dispatch(fetchNewGifsPageSuccess(data.data)))
+      .then(({ data }) => dispatch(fetchNewGifsPageSuccess(data)))
       .catch(error => dispatch(fetchGifsFailure(error)));
   }
 
   dispatch(fetchGifsRequest(searchParameter, page));
   return fetchGifs(searchParameter, page)
-    .then(({data}) => dispatch(fetchGifsSuccess(data.data)))
+    .then(({ data }) => dispatch(fetchGifsSuccess(data)))
     .catch(error => dispatch(fetchGifsFailure(error)));
 }
 
@@ -62,11 +63,12 @@ export const fetchGifsRequest = searchParameter => {
   }
 }
 
-export const fetchGifsSuccess = items => {
+export const fetchGifsSuccess = data => {
   return {
     type: FETCH_GIFS_SUCCESS,
     payload: {
-      items
+      items: data.data,
+      totalGifs: data.pagination.total_count
     }
   }
 }
@@ -77,11 +79,12 @@ export const fetchNewGifsPageRequest = () => {
   }
 }
 
-export const fetchNewGifsPageSuccess = items => {
+export const fetchNewGifsPageSuccess = data => {
   return {
     type: FETCH_NEW_GIFS_PAGE_SUCCESS,
     payload: {
-      items
+      items: data.data,
+      totalGifs: data.pagination.total_count
     }
   }
 }
@@ -92,6 +95,15 @@ export const fetchGifsFailure = error => {
     payload: {
       error
     }
+  }
+}
+
+export const toggleFavorites = gifClicked => (dispatch, getState) => {
+  if (getState().favoritedGifs.items.find(gif => gif.id === gifClicked.id) !== undefined) {
+    dispatch(removeGifFromFavorites(gifClicked));
+  }
+  else {
+    dispatch(addGifToFavorites(gifClicked))
   }
 }
 

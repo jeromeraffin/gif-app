@@ -23,7 +23,18 @@ const Button = LoaderHOC(styled.button`
   font-family: 'Montserrat', Helvetica, sans-serif;
 `)
 
-const Results = ({ gifs, favoritedGifs, onFavoriteClicked, page, loadingPage, loaded, loadMoreGifs, searchParameter, onCopyClicked }) => (
+const Results = ({
+  gifs,
+  favoritedGifs,
+  onFavoriteClicked,
+  page,
+  loadingPage,
+  loaded,
+  loadMoreGifs,
+  searchParameter,
+  onCopyClicked,
+  totalGifs
+}) => (
   <StyledSearch>
     <GifsList
       gifs={gifs}
@@ -31,7 +42,7 @@ const Results = ({ gifs, favoritedGifs, onFavoriteClicked, page, loadingPage, lo
       onFavoriteClicked={onFavoriteClicked}
       onCopyClicked={onCopyClicked}
     />
-  {loaded &&
+  {(loaded && gifs.length < totalGifs) &&
     <Button
       loading={loadingPage}
       onClick={() => { loadMoreGifs(searchParameter, page + 1) }}>

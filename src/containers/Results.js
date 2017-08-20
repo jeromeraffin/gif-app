@@ -6,8 +6,7 @@ import ErrorHOC from '../components/Error.js';
 
 import {
   sendSearch,
-  addGifToFavorites,
-  removeGifFromFavorites,
+  toggleFavorites,
   copyGifUrl
 } from '../actions';
 
@@ -20,53 +19,28 @@ const mapStateToProps = ({ gifs, favoritedGifs }) => {
     error: gifs.error,
     searchParameter: gifs.searchParameter,
     page: gifs.page,
-    loadingPage: gifs.loadingPage
+    loadingPage: gifs.loadingPage,
+    totalGifs: gifs.totalGifs
   }
 }
 
-const mergedProps = (stateProps, dispatchProps) => {
-  const {
-    favoritedGifs,
-    loading,
-    gifs,
-    loaded,
-    error,
-    page,
-    loadingPage,
-    searchParameter
-  } = stateProps;
-  const { dispatch } = dispatchProps;
-
+const mapDispatchToProps = dispatch => {
   return {
-    favoritedGifs,
-    loading,
-    gifs,
-    loaded,
-    error,
-    page,
-    loadingPage,
-    searchParameter,
     onFavoriteClicked: gifClicked => {
-      if(favoritedGifs.find(gif => gif.id === gifClicked.id) !== undefined) {
-        dispatch(removeGifFromFavorites(gifClicked));
-      }
-      else {
-        dispatch(addGifToFavorites(gifClicked))
-      }
+      dispatch(toggleFavorites(gifClicked));
     },
-    onCopyClicked: () => {
-      dispatch(copyGifUrl());
+    onCopyClicked: (url) => {
+      dispatch(copyGifUrl(url));
     },
     loadMoreGifs: (searchParameter, page) => {
       dispatch(sendSearch(searchParameter, page));
     }
   }
-};
+}
 
 const ConnectedResults = connect(
   mapStateToProps,
-  null,
-  mergedProps
+  mapDispatchToProps
 )(LoaderHOC(ErrorHOC(NoResultsHOC(Results))));
 
 export default ConnectedResults;

@@ -3,8 +3,7 @@ import { connect } from 'react-redux';
 import Favs from '../components/Favs';
 
 import {
-  addGifToFavorites,
-  removeGifFromFavorites,
+  toggleFavorites,
   copyGifUrl
 } from '../actions';
 
@@ -14,32 +13,20 @@ const mapStateToProps = ({ favoritedGifs }) => {
   }
 }
 
-const mergedProps = (stateProps, dispatchProps) => {
-  const {
-    favoritedGifs
-  } = stateProps;
-  const { dispatch } = dispatchProps;
-
+const mapDispatchToProps = dispatch => {
   return {
-    favoritedGifs,
     onFavoriteClicked: gifClicked => {
-      if(favoritedGifs.find(gif => gif.id === gifClicked.id) !== undefined) {
-        dispatch(removeGifFromFavorites(gifClicked));
-      }
-      else {
-        dispatch(addGifToFavorites(gifClicked))
-      }
+      dispatch(toggleFavorites(gifClicked));
     },
-    onCopyClicked: () => {
-      dispatch(copyGifUrl());
-    },
+    onCopyClicked: url => {
+      dispatch(copyGifUrl(url));
+    }
   }
-};
+}
 
 const ConnectedFavs = connect(
   mapStateToProps,
-  null,
-  mergedProps
+  mapDispatchToProps
 )(Favs);
 
 export default ConnectedFavs;

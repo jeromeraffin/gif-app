@@ -18,7 +18,8 @@ const initialState = {
   items: [],
   page: 0,
   loadingPage: false,
-  copied: false
+  copied: false,
+  totalGifs: 0
 }
 
 const gifs = (state = initialState, action) => {
@@ -59,6 +60,7 @@ const gifs = (state = initialState, action) => {
         ...state,
         page: 1,
         items: action.payload.items,
+        totalGifs: action.payload.totalGifs,
         loaded: true,
         loading: false
       }

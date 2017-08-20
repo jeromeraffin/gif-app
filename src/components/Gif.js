@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import CopyToClipboard from 'react-copy-to-clipboard';
 import styled, { keyframes } from 'styled-components';
 
 import Icon from './Icon';
@@ -70,17 +69,15 @@ const Gif = ({ id, url, originalUrl, width, height, favGif, onFavoriteClicked, o
         {
           favGif ?
           <Button onClick={() => {onFavoriteClicked(gifClicked)}}>
-            <FavIcon width="25" height="25"  glyph="favorite_full"/>
+            <FavIcon width="25" height="25" glyph="favorite_full"/>
           </Button> :
           <Button onClick={() => {onFavoriteClicked(gifClicked)}}>
             <FavIcon width="25" height="25" glyph="favorite_empty" />
           </Button>
         }
-        <CopyToClipboard text={originalUrl}>
-          <Button onClick={() => {onCopyClicked()}}>
-            <CopyIcon width="25" height="25" glyph="copy"/>
-          </Button>
-        </CopyToClipboard>
+        <Button onClick={() => {onCopyClicked(originalUrl)}}>
+          <CopyIcon width="25" height="25" glyph="copy"/>
+        </Button>
       </Actions>
     </Item>
   )
